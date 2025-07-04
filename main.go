@@ -15,7 +15,8 @@ var blackHole = make([]byte, 8192)
 
 func main() {
 	r := gin.New()
-	r.Any("/*", handler)
+	// catch all panics and log them
+	r.Any("/*any", handler)
 	r.GET("/download", handler)
 	err := r.Run(":8080")
 	if err != nil {
