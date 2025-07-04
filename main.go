@@ -28,8 +28,9 @@ func fileHandler(c *gin.Context) {
 	c.Writer.WriteHeader(200)
 	_, err := c.Writer.Write(boom)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error writing response:", err, "client IP:", c.ClientIP())
 		return
 	}
+	fmt.Println("Sent boom.gz to", c.ClientIP())
 	c.Writer.Flush()
 }
