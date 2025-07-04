@@ -13,9 +13,10 @@ import (
 
 var blackHole = make([]byte, 8192)
 
-const maxDataSize = 10 * 1024 * 1024 // 10 MiB
+const maxDataSize = 100 * 1024 * 1024 * 1024 // 100G
 
 func main() {
+
 	r := gin.New()
 	// catch all panics and log them
 	// r.GET("/download", handler)
