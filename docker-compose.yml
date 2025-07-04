@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  compressboom:
+    image: compressboom
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    hostname: compressboom
+    command: ["/app/compressboom"]
+    ports:
+      - "127.0.0.60:8960:8080"
