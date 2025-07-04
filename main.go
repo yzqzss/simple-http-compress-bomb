@@ -13,6 +13,8 @@ import (
 
 var blackHole = make([]byte, 8192)
 
+const maxDataSize = 10 * 1024 * 1024 // 10 MiB
+
 func main() {
 	r := gin.New()
 	// catch all panics and log them
@@ -43,10 +45,16 @@ func handler(c *gin.Context) {
 			fmt.Println(err)
 			return
 		}
-		for err == nil {
-			_, err = writer.Write(blackHole)
+		totalWritten := 0
+		for totalWritten < maxDataSize {
+			n, err := writer.Write(blackHole)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			totalWritten += n
 		}
-		fmt.Println(err)
+		writer.Close()
 		return
 	case "deflate":
 		fmt.Println("deflate")
@@ -56,29 +64,45 @@ func handler(c *gin.Context) {
 			fmt.Println(err)
 			return
 		}
-		for err == nil {
-			_, err = writer.Write(blackHole)
+		totalWritten := 0
+		for totalWritten < maxDataSize {
+			n, err := writer.Write(blackHole)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			totalWritten += n
 		}
-		fmt.Println(err)
+		writer.Close()
 		return
 	case "br":
 		fmt.Println("br")
 		c.Header("Content-Encoding", "br")
 		writer := brotli.NewWriterLevel(c.Writer, brotli.BestSpeed)
-		var err error
-		for err == nil {
-			_, err = writer.Write(blackHole)
+		totalWritten := 0
+		for totalWritten < maxDataSize {
+			n, err := writer.Write(blackHole)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			totalWritten += n
 		}
-		fmt.Println(err)
+		writer.Close()
 	case "compress":
 		fmt.Println("compress")
 		c.Header("Content-Encoding", "compress")
 		writer := lzw.NewWriter(c.Writer, lzw.LSB, 8)
-		var err error
-		for err == nil {
-			_, err = writer.Write(blackHole)
+		totalWritten := 0
+		for totalWritten < maxDataSize {
+			n, err := writer.Write(blackHole)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			totalWritten += n
 		}
-		fmt.Println(err)
+		writer.Close()
 	default:
 		return
 	}
