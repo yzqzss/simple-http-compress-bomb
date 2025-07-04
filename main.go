@@ -26,9 +26,9 @@ func main() {
 }
 
 func handler(c *gin.Context) {
-	if c.Request.URL.Path == "/" {
-		c.Header("content-type", "text/html; charset=UTF-8")
-	}
+	// if c.Request.URL.Path == "/" {
+	c.Header("content-type", "text/html; charset=UTF-8")
+	// }
 	acceptEncodingsStr := c.GetHeader("accept-encoding")
 	acceptEncodings := strings.Split(acceptEncodingsStr, ", ")
 	if len(acceptEncodings) == 0 {
