@@ -11,9 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var blackHole = make([]byte, 8192)
+var blackHole = make([]byte, 8192*1024) // 8 MiB
 
-const maxDataSize = 100 * 1024 * 1024 * 1024 // 100G
+const maxDataSize = 20 * 1024 * 1024 * 1024 // 20G
 
 func main() {
 
